@@ -32,6 +32,7 @@ obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E3FA2_AMS549EH01) += panel-samsung-s6e3fa2-ams5
 obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E8AA5X01_AMS497HY01) += panel-samsung-s6e8aa5x01-ams497hy01.o
 obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E8AA5X01_AMS520KT01) += panel-samsung-s6e8aa5x01-ams520kt01.o
 obj-$(CONFIG_DRM_PANEL_SAMSUNG_SC7798A_BV045WVM) += panel-samsung-sc7798a-bv045wvm.o
+obj-$(CONFIG_DRM_PANEL_SONY_TRULY_NT35521) += panel-sony-truly-nt35521.o
 obj-$(CONFIG_DRM_PANEL_WINGTECH_AUO_NT35521) += panel-wingtech-auo-nt35521.o
 obj-$(CONFIG_DRM_PANEL_WINGTECH_AUO_R61308) += panel-wingtech-auo-r61308.o
 obj-$(CONFIG_DRM_PANEL_WINGTECH_BOE_HX8394F) += panel-wingtech-boe-hx8394f.o
