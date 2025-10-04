@@ -228,9 +228,11 @@ static int sc7798a_bv045wvm_probe(struct mipi_dsi_device *dsi)
 	struct sc7798a_bv045wvm *ctx;
 	int ret;
 
-	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-	if (!ctx)
-		return -ENOMEM;
+	ctx = devm_drm_panel_alloc(dev, struct sc7798a_bv045wvm, panel,
+				   &sc7798a_bv045wvm_panel_funcs,
+				   DRM_MODE_CONNECTOR_DSI);
+	if (IS_ERR(ctx))
+		return PTR_ERR(ctx);
 
 	ret = devm_regulator_bulk_get_const(dev,
 					    ARRAY_SIZE(sc7798a_bv045wvm_supplies),
@@ -253,8 +255,6 @@ static int sc7798a_bv045wvm_probe(struct mipi_dsi_device *dsi)
 			  MIPI_DSI_MODE_NO_EOT_PACKET |
 			  MIPI_DSI_CLOCK_NON_CONTINUOUS;
 
-	drm_panel_init(&ctx->panel, dev, &sc7798a_bv045wvm_panel_funcs,
-		       DRM_MODE_CONNECTOR_DSI);
 	ctx->panel.prepare_prev_first = true;
 
 	ctx->panel.backlight = sc7798a_bv045wvm_create_backlight(dsi);

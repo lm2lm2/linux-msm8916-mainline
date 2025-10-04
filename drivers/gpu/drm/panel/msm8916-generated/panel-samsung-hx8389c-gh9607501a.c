@@ -263,9 +263,11 @@ static int hx8389c_gh9607501a_probe(struct mipi_dsi_device *dsi)
 	struct hx8389c_gh9607501a *ctx;
 	int ret;
 
-	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-	if (!ctx)
-		return -ENOMEM;
+	ctx = devm_drm_panel_alloc(dev, struct hx8389c_gh9607501a, panel,
+				   &hx8389c_gh9607501a_panel_funcs,
+				   DRM_MODE_CONNECTOR_DSI);
+	if (IS_ERR(ctx))
+		return PTR_ERR(ctx);
 
 	ret = devm_regulator_bulk_get_const(dev,
 					    ARRAY_SIZE(hx8389c_gh9607501a_supplies),
@@ -288,8 +290,6 @@ static int hx8389c_gh9607501a_probe(struct mipi_dsi_device *dsi)
 			  MIPI_DSI_MODE_NO_EOT_PACKET |
 			  MIPI_DSI_CLOCK_NON_CONTINUOUS;
 
-	drm_panel_init(&ctx->panel, dev, &hx8389c_gh9607501a_panel_funcs,
-		       DRM_MODE_CONNECTOR_DSI);
 	ctx->panel.prepare_prev_first = true;
 
 	ret = drm_panel_of_backlight(&ctx->panel);

@@ -146,9 +146,11 @@ static int nt35521_probe(struct mipi_dsi_device *dsi)
 	struct nt35521 *ctx;
 	int ret;
 
-	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-	if (!ctx)
-		return -ENOMEM;
+	ctx = devm_drm_panel_alloc(dev, struct nt35521, panel,
+				   &nt35521_panel_funcs,
+				   DRM_MODE_CONNECTOR_DSI);
+	if (IS_ERR(ctx))
+		return PTR_ERR(ctx);
 
 	ctx->supply = devm_regulator_get(dev, "power");
 	if (IS_ERR(ctx->supply))
@@ -172,8 +174,6 @@ static int nt35521_probe(struct mipi_dsi_device *dsi)
 			  MIPI_DSI_MODE_VIDEO_NO_HBP |
 			  MIPI_DSI_MODE_VIDEO_NO_HSA;
 
-	drm_panel_init(&ctx->panel, dev, &nt35521_panel_funcs,
-		       DRM_MODE_CONNECTOR_DSI);
 	ctx->panel.prepare_prev_first = true;
 
 	ret = drm_panel_of_backlight(&ctx->panel);

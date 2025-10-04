@@ -311,9 +311,11 @@ static int ili9881_qimei_probe(struct mipi_dsi_device *dsi)
 	struct ili9881_qimei *ctx;
 	int ret;
 
-	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-	if (!ctx)
-		return -ENOMEM;
+	ctx = devm_drm_panel_alloc(dev, struct ili9881_qimei, panel,
+				   &ili9881_qimei_panel_funcs,
+				   DRM_MODE_CONNECTOR_DSI);
+	if (IS_ERR(ctx))
+		return PTR_ERR(ctx);
 
 	ret = devm_regulator_bulk_get_const(dev,
 					    ARRAY_SIZE(ili9881_qimei_supplies),
@@ -339,8 +341,6 @@ static int ili9881_qimei_probe(struct mipi_dsi_device *dsi)
 			  MIPI_DSI_MODE_VIDEO_NO_HBP |
 			  MIPI_DSI_MODE_VIDEO_NO_HSA;
 
-	drm_panel_init(&ctx->panel, dev, &ili9881_qimei_panel_funcs,
-		       DRM_MODE_CONNECTOR_DSI);
 	ctx->panel.prepare_prev_first = true;
 
 	ret = drm_panel_of_backlight(&ctx->panel);
